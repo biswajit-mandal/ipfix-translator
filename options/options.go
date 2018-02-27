@@ -13,7 +13,6 @@ import (
 type ConfigOptions struct {
 	Verbose          bool   `yaml:"verbose" env:"IPFIX_TRANSLATOR_LOG_ENABLE"`
 	KafkaBrokerList  string `yaml:"kafka-broker-list" env:"KAFKA_BROKER_LIST"`
-	KafkaPartition   int    `yaml:"kafka-partition" env:"KAFKA_PARTITION"`
 	DataMgrIpAddress string `yaml:"data-manager-ip" env:"DATA_MANAGER_IP_ADDRESS"`
 	DataMgrPort      string `yaml:"data-manager-port" env:"DATA_MANAGER_PORT"`
 	LogFile          string `yaml:"log-file" env:"IPFIX_LOG_FILE"`
@@ -23,7 +22,6 @@ var (
 	Verbose          = false
 	KafkaBrokerList  = "127.0.0.1:9092"
 	KafkaTopic       = "vflow.ipfix"
-	KafkaPartition   = 0
 	DataMgrIpAddress = "127.0.0.1"
 	DataMgrPort      = "9000"
 	LogFile          = "/var/log/ipfix-translator.log"
@@ -47,7 +45,6 @@ func ParseArgs(c *cli.Context) error {
 	config := ConfigOptions{
 		Verbose:          Verbose,
 		KafkaBrokerList:  KafkaBrokerList,
-		KafkaPartition:   KafkaPartition,
 		DataMgrIpAddress: DataMgrIpAddress,
 		DataMgrPort:      DataMgrPort,
 		LogFile:          LogFile,
@@ -56,8 +53,7 @@ func ParseArgs(c *cli.Context) error {
 	if err != nil {
 		log.Fatalf("Config file %v parse error: %v", MHConfigFile, err)
 	}
-	KafkaBrokerList = config.KafkaBrokerList //strings.Split(config.KafkaBrokerList, ",")
-	KafkaPartition = config.KafkaPartition
+	KafkaBrokerList = config.KafkaBrokerList
 	DataMgrIpAddress = config.DataMgrIpAddress
 	DataMgrPort = config.DataMgrPort
 	Verbose = config.Verbose
