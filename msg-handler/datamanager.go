@@ -65,16 +65,9 @@ func (dm *DataManager) handleMessages(mhChan chan []byte) {
 func (dm *DataManager) splitDataSets(msg *Message) []DMMessage {
 	res := make([]DMMessage, len(msg.DataSets))
 	for i, dataSet := range msg.DataSets {
-		/*
-		   Do not compute Timestamp from msg.Header.ExportTime, as if the time is
-		   not properly set in the sender, then time will not sync between Txer and
-		   Rxer
-		   tsInMilliSecs := msg.Header.ExportTime * 1000
-		*/
-		tsInMilliSecs := time.Now().UnixNano() / 1000000
 		res[i] = DMMessage{CollectionName: "ipfix_flow_collection",
 			Data: AugmentedMessage{Header: msg.Header, DataSets: dataSet, AgentID: msg.AgentID,
-				RoomKey: msg.AgentID, Timestamp: tsInMilliSecs}}
+				RoomKey: msg.AgentID, Timestamp: msg.Timestamp}}
 		var emptyTM struct{}
 		res[i].TailwindManager = &emptyTM
 	}

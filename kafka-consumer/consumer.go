@@ -121,6 +121,7 @@ func manageChannels() (chan []byte, chan []byte) {
 }
 
 func registerMsgHandlers(outCh chan []byte) {
+	// Register all the message handlers here
 	go func(outCh chan []byte) {
 		mh := msghandler.NewMsgHandler(opts.StrDataManager)
 		mh.MHChan = outCh
