@@ -1,7 +1,13 @@
+/*
+ * Copyright (c) 2018 Juniper Networks, Inc. All rights reserved.
+ *
+ * file:    main.go
+ * details: Entry point for the ipfix-translator, the binary creates Command
+ *          Line Interface (CLI) utility to run the application.
+ */
 package main
 
 import (
-	"log"
 	"os"
 
 	kc "github.com/Juniper/ipfix-translator/kafka-consumer"
@@ -31,6 +37,6 @@ func main() {
 	}
 	err := app.Run(os.Args)
 	if err != nil {
-		log.Fatalf("Application error: %s", err)
+		opts.Logger.Fatalf("Application error: %s", err)
 	}
 }

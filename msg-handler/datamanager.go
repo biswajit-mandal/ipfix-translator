@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2018 Juniper Networks, Inc. All rights reserved.
+ *
+ * file:    main.go
+ * details: Deals with the handling messages to send to Data Manager
+ *
+ */
 package msghandler
 
 import (
@@ -5,16 +12,28 @@ import (
 	"fmt"
 	opts "github.com/Juniper/ipfix-translator/options"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strings"
 	"time"
 )
 
+// AugmentedMessage is augmented message structure based on Message structure.
+// IPFIX DataSets may contain more than one dataset. While pushing the data to
+// Data Manager, we split the data into length of DataSets.
+type AugmentedMessage struct {
+	AgentID   string        `json:"AgentID"`
+	Header    MessageHeader `json:"Header"`
+	DataSets  IpfixDataSet  `json:"DataSets"`
+	Timestamp int64         `json:"Timestamp"`
+	RoomKey   string        `json:"roomKey"`
+}
+
+// DataManager structure
 type DataManager struct {
 	netClient *http.Client
 }
 
+// DMMessage structure as the data needs to be pushed to DM
 type DMMessage struct {
 	CollectionName  string           `json:"collection_name"`
 	Data            AugmentedMessage `json:"data"`
@@ -36,7 +55,7 @@ func (dm *DataManager) handleMessages(mhChan chan []byte) {
 		select {
 		case msg = <-mhChan:
 			if opts.Verbose {
-				log.Println("Received Message on DM Handler ", string(msg))
+				opts.Logger.Println("Received Message on DM Handler ", string(msg))
 			}
 			dm.pushDataToDataManager(msg)
 		}
@@ -66,7 +85,7 @@ func (dm *DataManager) serializeDataToDataManager(msg []byte) ([]DMMessage, erro
 	var p Message
 	err := json.Unmarshal(msg, &p)
 	if err != nil {
-		log.Println("data Serialize json.Unmarshal() error ", err)
+		opts.Logger.Println("data Serialize json.Unmarshal() error ", err)
 		return nil, err
 	}
 	dmMsgs := dm.splitDataSets(&p)
@@ -81,7 +100,7 @@ func (dm *DataManager) pushDataToDataManager(msg []byte) error {
 	contentType = "application/json"
 	dmMsgs, err := dm.serializeDataToDataManager(msg)
 	if err != nil {
-		log.Println("data serialize->DM error ", err)
+		opts.Logger.Println("data serialize->DM error ", err)
 		return err
 	}
 	msgCnt := len(dmMsgs)
@@ -89,22 +108,22 @@ func (dm *DataManager) pushDataToDataManager(msg []byte) error {
 	for idx := 0; idx < msgCnt; idx++ {
 		dmMsg, err := json.Marshal(dmMsgs[idx])
 		if err != nil {
-			log.Println("data json.Marshal() error ", err)
+			opts.Logger.Println("data json.Marshal() error ", err)
 		}
 		if opts.Verbose {
-			log.Println("Sending POST data to DM ", reqUrl, string(dmMsg))
+			opts.Logger.Println("Sending POST data to DM ", reqUrl, string(dmMsg))
 		}
 		response, err := dm.netClient.Post(reqUrl, contentType, strings.NewReader(string(dmMsg)))
 		if err != nil {
-			log.Println("DataManager POST error ", err)
+			opts.Logger.Println("DataManager POST error ", err)
 		} else {
 			defer response.Body.Close()
 			body, err := ioutil.ReadAll(response.Body)
 			if err != nil {
-				log.Fatalln("Parse error response body ", err)
+				opts.Logger.Fatalln("Parse error response body ", err)
 			}
 			if opts.Verbose {
-				log.Println("Getting response from DM ", string(body))
+				opts.Logger.Println("Getting response from DM ", string(body))
 			}
 		}
 	}

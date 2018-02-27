@@ -1,4 +1,6 @@
-kafka-broker-list: "127.0.0.1:9092"
+verbose: True
+log-file: "/var/log/ipfix-translator.log"
+kafka-broker-list: "10.84.30.201:9092"
 kafka-partition: 0
 
 data-manager-ip: "10.102.44.34"

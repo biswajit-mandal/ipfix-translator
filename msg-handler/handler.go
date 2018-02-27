@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2018 Juniper Networks, Inc. All rights reserved.
+ *
+ * file:    handler.go
+ * details: Initializes all the message handlers
+ *
+ */
 package msghandler
 
 import (

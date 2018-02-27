@@ -1,4 +1,9 @@
-//This file is auto generated, do not modify
+/*
+ * Copyright (c) 2018 Juniper Networks, Inc. All rights reserved.
+ *
+ ***** This file is auto generated, do not modify *****
+ *
+ */
 package msghandler
 
 type IpfixDataSet struct {

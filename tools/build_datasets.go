@@ -1,3 +1,5 @@
+// +build ignore
+
 package main
 
 import (
@@ -15,7 +17,12 @@ func main() {
 		buffer bytes.Buffer
 		keys   []string
 	)
-	buffer.WriteString("//This file is auto generated, do not modify\n")
+	buffer.WriteString("/*\n")
+	buffer.WriteString(" * Copyright (c) 2018 Juniper Networks, Inc. All rights reserved.\n")
+	buffer.WriteString(" *\n")
+	buffer.WriteString(" ***** This file is auto generated, do not modify *****\n")
+	buffer.WriteString(" *\n")
+	buffer.WriteString(" */\n")
 	buffer.WriteString("package msghandler")
 	buffer.WriteString("\n\n")
 	buffer.WriteString("type IpfixDataSet struct {\n")

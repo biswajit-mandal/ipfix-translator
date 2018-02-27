@@ -1,19 +1,19 @@
+/*
+ * Copyright (c) 2018 Juniper Networks, Inc. All rights reserved.
+ *
+ * file:    main.go
+ * details: Contains the message structure
+ */
+
 package msghandler
 
+// Message represents IPFIX message
 type Message struct {
 	AgentID   string         `json:"AgentID"`
 	Header    MessageHeader  `json:"Header"`
 	DataSets  []IpfixDataSet `json:"DataSets"`
 	Timestamp int64          `json:"Timestamp"`
 	RoomKey   string         `json:"roomKey"`
-}
-
-type AugmentedMessage struct {
-	AgentID   string        `json:"AgentID"`
-	Header    MessageHeader `json:"Header"`
-	DataSets  IpfixDataSet  `json:"DataSets"`
-	Timestamp int64         `json:"Timestamp"`
-	RoomKey   string        `json:"roomKey"`
 }
 
 // MessageHeader represents IPFIX message header
