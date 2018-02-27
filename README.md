@@ -44,8 +44,12 @@ data-manager-ip: "127.0.0.1"
 data-manager-port: "9000"
 ```
 ```verbose:``` Boolean, if Verbose mode is on or off
+
 ```log-file:``` The file path where the log file should be created
+
 ```kafka-broker-list:``` Kafka Broker List
+
 ```data-manager-ip:``` IP Address where Data Manager is running
-```data-manager-port:``` Port Data Manager is listening on
+
+```data-manager-port:``` Port, Data Manager is listening on
 
