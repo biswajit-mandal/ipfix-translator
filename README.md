@@ -4,6 +4,11 @@ IPFIX Translator is translator piece of code for IPFIX messages as received on K
 IPFIX messages from different devices are received by [vFlow](https://github.com/VerizonDigital/vflow) module and it then sends them on Kafka bus.
 Once IPFIX Translator receives the messages on Kafka bus, it parses the data and pushes to different databases based on configuration. Currently it pushes the data only to Appformix Data Manager (DM).
 
+### Build pre-requisites
+- Install [git](https://www.atlassian.com/git/tutorials/install-git)
+- Install [go](https://golang.org/doc/install)
+- Install [dep](https://github.com/golang/dep)
+
 ### Build
 ```
 make build
